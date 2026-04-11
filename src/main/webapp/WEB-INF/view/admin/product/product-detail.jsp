@@ -41,9 +41,7 @@
                     <div class="breadcrumb-glass">
                         <a href="${pageContext.request.contextPath}/"><i class="fa-solid fa-house"></i> Home</a>
                         <span class="separator">/</span>
-                        <a href="#">${product.target}</a>
-                        <span class="separator">/</span>
-                        <span class="active">${product.name}</span>
+                        <span class="active">Chi tiết sản phẩm</span>
                     </div>
 
                     <div class="row gx-5">
