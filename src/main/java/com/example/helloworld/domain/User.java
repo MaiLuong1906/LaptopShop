@@ -2,6 +2,8 @@ package com.example.helloworld.domain;
 
 import java.util.List;
 
+import com.example.helloworld.service.validator.StrongPassword;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -29,6 +31,7 @@ public class User {
 
     @NotNull
     @Size(min = 6, message = "Password must be at least 6 characters long")
+    @StrongPassword
     private String password;
 
     @NotNull
