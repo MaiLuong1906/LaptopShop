@@ -16,7 +16,24 @@
             </head>
 
             <body>
-                <h1>Login</h1>
+                <form method="post" action="/login">
+                    <c:if test="${param.error!=null}">
+                        <div class="alert alert-danger" role="alert">
+                            Invalid username or password.
+                        </div>
+                    </c:if>
+                    <div class="mb-3">
+                        <label>Email</label>
+                        <input type="email" name="username" cssClass="form-control" />
+                    </div>
+                    <div class="mb-3">
+                        <label>Password</label>
+                        <input type="password" name="password" cssClass="form-control" />
+                    </div>
+                    <div>
+                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+                    </div>
+                    <button type="submit" class="btn btn-primary">Login</button>
             </body>
 
             </html>

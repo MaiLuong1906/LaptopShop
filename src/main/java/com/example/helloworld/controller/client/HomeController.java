@@ -19,6 +19,7 @@ import com.example.helloworld.service.UserService;
 import jakarta.validation.Valid;
 
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class HomeController {
@@ -59,6 +60,11 @@ public class HomeController {
     public String getLoginPage(Model model) {
         model.addAttribute("loginUser", new RegisterDTO());
         return "client/auth/login";
+    }
+
+    @GetMapping("/access-denied")
+    public String get403Page() {
+        return "client/auth/access-denied";
     }
 
 }

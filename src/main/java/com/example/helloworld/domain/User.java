@@ -25,17 +25,10 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Email(message = "Email is not valid", regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$")
-    @NotEmpty(message = "Email is required")
     private String email;
 
-    @NotNull
-    @Size(min = 6, message = "Password must be at least 6 characters long")
-    @StrongPassword
     private String password;
 
-    @NotNull
-    @Size(min = 2, message = "Full name must be at least 2 characters long")
     private String fullName;
     private String address;
     private String phone;
