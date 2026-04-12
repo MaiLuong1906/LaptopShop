@@ -1,13 +1,28 @@
 package com.example.helloworld.domain.dto;
 
+import com.example.helloworld.service.validator.StrongPassword;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 import com.example.helloworld.service.validator.RegisterChecked;
 
 @RegisterChecked
 public class RegisterDTO {
+    @NotEmpty(message = "First name is required")
     private String firstName;
+    
+    @NotEmpty(message = "Last name is required")
     private String lastName;
+    
+    @NotEmpty(message = "Email is required")
+    @Email(message = "Email is not valid", regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$")
     private String email;
+    
+    @NotEmpty(message = "Password is required")
+    @Size(min = 6, message = "Password must be at least 6 characters long")
+    @StrongPassword
     private String password;
+    
     private String confirmPassword;
 
     public String getFirstName() {

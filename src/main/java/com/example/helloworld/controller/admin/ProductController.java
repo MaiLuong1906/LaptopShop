@@ -21,7 +21,6 @@ import com.example.helloworld.service.UploadFileService;
 import jakarta.validation.Valid;
 
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 @Controller
 public class ProductController {
@@ -79,7 +78,8 @@ public class ProductController {
     }
 
     @PostMapping("/admin/product/update")
-    public String postUpdateProduct(@ModelAttribute("product") Product product, Model model, @RequestParam(value = "file", required = false) MultipartFile file) {
+    public String postUpdateProduct(@ModelAttribute("product") Product product, Model model,
+            @RequestParam(value = "file", required = false) MultipartFile file) {
         Product existingProduct = productService.getProductById(product.getId());
         if (existingProduct == null) {
             // Handle case where product doesn't exist
