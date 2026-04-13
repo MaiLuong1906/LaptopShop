@@ -27,12 +27,13 @@
                     transition: opacity 0.3s ease;
                 }
             </style>
+            <link rel="stylesheet" href="${pageContext.request.contextPath}/client/css/product-detail.css">
         </head>
 
         <body class="dark-theme">
 
             <!-- Header Section -->
-            <jsp:include page="../../layout/header.jsp" />
+
 
             <!-- Product Detail Section -->
             <section class="product-detail-section">
@@ -137,23 +138,32 @@
                                 </div>
 
                                 <!-- Actions -->
-                                <div class="qty-wrapper">
-                                    <span class="me-3 text-secondary">Quantity:</span>
-                                    <div class="qty-selector">
-                                        <button class="qty-btn" id="btn-minus">-</button>
-                                        <input type="number" id="qty" class="qty-input" value="1" min="1" max="10"
-                                            readonly>
-                                        <button class="qty-btn" id="btn-plus">+</button>
+                                <form id="addToCartForm" method="post" action="/add-product-to-cart/${product.id}">
+                                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+                                    <div class="qty-wrapper mb-4">
+                                        <span class="me-3 text-secondary">Quantity:</span>
+                                        <div class="qty-selector">
+                                            <button type="button" class="qty-btn" id="btn-minus">-</button>
+                                            <input type="number" id="qty" name="quantity" class="qty-input" value="1"
+                                                min="1" max="${product.quantity}" readonly>
+                                            <button type="button" class="qty-btn" id="btn-plus">+</button>
+                                        </div>
                                     </div>
-                                </div>
 
-                                <div class="action-buttons">
-                                    <button class="btn-glow"><i class="fa-solid fa-cart-plus"></i> Add to Cart</button>
-                                    <button class="btn-gradient"><i class="fa-solid fa-credit-card"></i> Buy
-                                        Now</button>
-                                    <button class="btn-wishlist" title="Add to Wishlist"><i
-                                            class="fa-regular fa-heart"></i></button>
-                                </div>
+                                    <div class="action-buttons">
+                                        <button type="submit" class="btn-glow"><i class="fa-solid fa-cart-plus"></i>
+                                            Thêm vào giỏ</button>
+
+                                        <button type="button"
+                                            onclick="document.getElementById('addToCartForm').action='/buy-now/${product.id}'; document.getElementById('addToCartForm').submit();"
+                                            class="btn-gradient">
+                                            <i class="fa-solid fa-credit-card"></i> Mua ngay
+                                        </button>
+
+                                        <button type="button" class="btn-wishlist" title="Add to Wishlist"><i
+                                                class="fa-regular fa-heart"></i></button>
+                                    </div>
+                                </form>
 
                                 <ul class="policy-list">
                                     <li><i class="fa-solid fa-truck-fast"></i> Free Global Shipping over $1000</li>
@@ -267,11 +277,12 @@
 
                     // Quantity selector logic
                     const qtyInput = document.getElementById('qty');
+                    const maxQty = parseInt(qtyInput.getAttribute('max')) || 10;
                     document.getElementById('btn-minus').addEventListener('click', () => {
                         if (parseInt(qtyInput.value) > 1) qtyInput.value--;
                     });
                     document.getElementById('btn-plus').addEventListener('click', () => {
-                        if (parseInt(qtyInput.value) < 10) qtyInput.value++;
+                        if (parseInt(qtyInput.value) < maxQty) qtyInput.value++;
                     });
                 });
             </script>

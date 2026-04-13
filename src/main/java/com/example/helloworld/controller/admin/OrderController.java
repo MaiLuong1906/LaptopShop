@@ -46,8 +46,7 @@ public class OrderController {
     public String postOrderUpdate(@ModelAttribute("order") Order orderInfo) {
         Order order = productService.getOrderById(orderInfo.getId());
         if (order != null) {
-            order.setStatus(orderInfo.getStatus());
-            productService.updateOrder(order);
+            productService.updateOrderStatus(order, orderInfo.getStatus());
         }
         return "redirect:/admin/orders";
     }
