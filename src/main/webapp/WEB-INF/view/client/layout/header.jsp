@@ -36,6 +36,10 @@
                                    onmouseover="this.style.background='rgba(255,255,255,0.1)'"
                                    onmouseout="this.style.background='transparent'">
                                 <i class="fa-solid fa-id-badge me-2"></i> Profile</a></li>
+                            <li><a class="dropdown-item text-white" href="${pageContext.request.contextPath}/order-history"
+                                   onmouseover="this.style.background='rgba(255,255,255,0.1)'"
+                                   onmouseout="this.style.background='transparent'">
+                                <i class="fa-solid fa-clipboard-list me-2"></i> Lịch sử đơn hàng</a></li>
                             <li><hr class="dropdown-divider" style="border-color: rgba(255, 255, 255, 0.1);"></li>
                             <li>
                                 <form method="post" action="/logout" class="m-0 p-0 text-white">

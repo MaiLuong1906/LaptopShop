@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 
 import com.example.helloworld.domain.Cart;
 import com.example.helloworld.domain.CartDetail;
+import com.example.helloworld.domain.Order;
 import com.example.helloworld.domain.User;
 import com.example.helloworld.service.ProductService;
 
@@ -29,11 +30,12 @@ public class ItemController {
     }
 
     @PostMapping("/add-product-to-cart/{id}")
-    public String addProductToCart(@PathVariable("id") long id, HttpServletRequest request) {
+    public String addProductToCart(@PathVariable("id") long id, HttpServletRequest request,
+            @RequestParam(value = "quantity", defaultValue = "1") int quantity) {
         HttpSession session = request.getSession();
         String email = (String) session.getAttribute("email");
         if (email != null) {
-            productService.handleAddProductToCart(email, id);
+            productService.handleAddProductToCart(email, id, quantity);
             // Cập nhật lại sum vào session để header hiển thị ngay
             Cart cart = productService.getCartByUserEmail(email);
             if (cart != null) {
@@ -41,6 +43,21 @@ public class ItemController {
             }
         }
         return "redirect:/";
+    }
+
+    @PostMapping("/buy-now/{id}")
+    public String buyNowProduct(@PathVariable("id") long id, HttpServletRequest request,
+            @RequestParam(value = "quantity", defaultValue = "1") int quantity) {
+        HttpSession session = request.getSession();
+        String email = (String) session.getAttribute("email");
+        if (email != null) {
+            productService.handleAddProductToCart(email, id, quantity);
+            Cart cart = productService.getCartByUserEmail(email);
+            if (cart != null) {
+                session.setAttribute("cartSum", cart.getSum());
+            }
+        }
+        return "redirect:/cart";
     }
 
     @GetMapping("/cart")
@@ -124,6 +141,35 @@ public class ItemController {
         long id = (long) session.getAttribute("id");
         user.setId(id);
         this.productService.handlePlaceOrder(user, session, fullName, phone, address);
-        return "redirect:/";
+        return "redirect:/order-history";
+    }
+
+    @GetMapping("/order-history")
+    public String getOrderHistory(HttpServletRequest request, Model model) {
+        HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("id") == null) {
+            return "redirect:/login";
+        }
+        long id = (long) session.getAttribute("id");
+        User user = new User();
+        user.setId(id);
+        model.addAttribute("orders", this.productService.getOrdersByUser(user));
+        return "client/order/history";
+    }
+
+    @PostMapping("/cancel-order/{id}")
+    public String cancelOrder(@PathVariable("id") long id, HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("id") == null) {
+            return "redirect:/login";
+        }
+        Order order = productService.getOrderById(id);
+        long userId = (long) session.getAttribute("id");
+
+        // Only allow cancel if user owns the order and it's PENDING
+        if (order != null && order.getUser().getId() == userId && "PENDING".equals(order.getStatus())) {
+            productService.updateOrderStatus(order, "CANCELED");
+        }
+        return "redirect:/order-history";
     }
 }

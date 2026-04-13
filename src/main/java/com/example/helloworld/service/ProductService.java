@@ -56,7 +56,7 @@ public class ProductService {
         productRepository.deleteById(id);
     }
 
-    public void handleAddProductToCart(String email, long productId) {
+    public void handleAddProductToCart(String email, long productId, int quantity) {
         // B1: Lấy ra user theo email
         User user = userService.findByEmail(email);
         if (user == null)
@@ -81,9 +81,10 @@ public class ProductService {
         CartDetail oldDetail = cartDetailRepository.findByCartAndProducts(cart, product);
 
         if (oldDetail == null) {
+            if (product.getQuantity() < quantity) return; // Prevent adding if out of stock
             // Chưa có → tạo mới CartDetail
             CartDetail cartDetail = new CartDetail();
-            cartDetail.setQuantity(1);
+            cartDetail.setQuantity(quantity);
             cartDetail.setPrice(product.getPrice());
             cartDetail.setCart(cart);
             cartDetail.setProducts(product);
@@ -93,8 +94,11 @@ public class ProductService {
             cart.setSum(cart.getSum() + 1);
             cartRepository.save(cart);
         } else {
-            // Đã có → chỉ tăng số lượng
-            oldDetail.setQuantity(oldDetail.getQuantity() + 1);
+            if (oldDetail.getQuantity() + quantity > product.getQuantity()) {
+                oldDetail.setQuantity(product.getQuantity());
+            } else {
+                oldDetail.setQuantity(oldDetail.getQuantity() + quantity);
+            }
             cartDetailRepository.save(oldDetail);
         }
     }
@@ -146,7 +150,10 @@ public class ProductService {
             Optional<CartDetail> cartDetailFromDB = cartDetailRepository.findById(cartDetail.getId());
             if (cartDetailFromDB.isPresent()) {
                 CartDetail cartDetail1 = cartDetailFromDB.get();
-                cartDetail1.setQuantity(cartDetail.getQuantity());
+                Product p = cartDetail1.getProducts();
+                long maxAllowed = p.getQuantity();
+                long requestedQuantity = cartDetail.getQuantity();
+                cartDetail1.setQuantity(Math.min(requestedQuantity, maxAllowed));
                 cartDetailRepository.save(cartDetail1);
             }
         }
@@ -158,19 +165,40 @@ public class ProductService {
         order.setReceiverName(fullName);
         order.setReceiverAddress(address);
         order.setReceiverPhone(phone);
+        order.setStatus("PENDING");
         order = orderRepository.save(order);
 
+                        double totalPrice = 0;
         Cart cart = cartRepository.findByUser(user);
         if (cart != null) {
             List<CartDetail> cartDetails = cartDetailRepository.findByCart(cart);
             if (cartDetails != null) {
+                // First pass: cap quantity to limit
                 for (CartDetail cartDetail : cartDetails) {
+                    Product p = cartDetail.getProducts();
+                    long maxAllowed = p.getQuantity();
+                    if (cartDetail.getQuantity() > maxAllowed) {
+                        cartDetail.setQuantity(maxAllowed);
+                    }
+                }
+
+                for (CartDetail cartDetail : cartDetails) {
+                    Product p = cartDetail.getProducts();
+                    if (cartDetail.getQuantity() <= 0) continue; // Skip out of stock
+
                     OrderDetail orderDetail = new OrderDetail();
                     orderDetail.setOrder(order);
-                    orderDetail.setProduct(cartDetail.getProducts());
+                    orderDetail.setProduct(p);
                     orderDetail.setQuantity(cartDetail.getQuantity());
                     orderDetail.setPrice(cartDetail.getPrice());
                     orderDetailRepository.save(orderDetail);
+                    
+                    totalPrice += cartDetail.getPrice() * cartDetail.getQuantity();
+                    
+                    // Deduct stock and update sold
+                    p.setQuantity(p.getQuantity() - cartDetail.getQuantity());
+                    p.setSold(p.getSold() + cartDetail.getQuantity());
+                    productRepository.save(p);
                 }
                 for (CartDetail cartDetail : cartDetails) {
                     cartDetailRepository.delete(cartDetail);
@@ -180,6 +208,58 @@ public class ProductService {
                 session.setAttribute("cartSum", 0);
             }
         }
+        
+        order.setTotalPrice(totalPrice);
+        orderRepository.save(order);
+    }
+    public List<Order> getOrdersByUser(User user) {
+        return orderRepository.findByUser(user);
+    }
 
+    public List<Order> getAllOrders() {
+        return orderRepository.findAll();
+    }
+
+    public Order getOrderById(long id) {
+        return orderRepository.findById(id).orElse(null);
+    }
+
+    public void updateOrderStatus(Order order, String newStatus) {
+        String oldStatus = order.getStatus();
+        
+        if (!"CANCELED".equals(oldStatus) && "CANCELED".equals(newStatus)) {
+            // Cancelled: Restore inventory
+            for (OrderDetail detail : order.getOrderDetails()) {
+                Product p = detail.getProduct();
+                p.setQuantity(p.getQuantity() + detail.getQuantity());
+                p.setSold(p.getSold() - detail.getQuantity());
+                productRepository.save(p);
+            }
+        } else if ("CANCELED".equals(oldStatus) && !"CANCELED".equals(newStatus)) {
+            // Un-cancelled: Re-deduct inventory
+            for (OrderDetail detail : order.getOrderDetails()) {
+                Product p = detail.getProduct();
+                p.setQuantity(p.getQuantity() - detail.getQuantity());
+                p.setSold(p.getSold() + detail.getQuantity());
+                productRepository.save(p);
+            }
+        }
+        
+        order.setStatus(newStatus);
+        orderRepository.save(order);
+    }
+
+    public void deleteOrderById(long id) {
+        Optional<Order> orderOptional = orderRepository.findById(id);
+        if (orderOptional.isPresent()) {
+            Order order = orderOptional.get();
+            List<OrderDetail> details = order.getOrderDetails();
+            if (details != null) {
+                for (OrderDetail detail : details) {
+                    orderDetailRepository.deleteById(detail.getId());
+                }
+            }
+            orderRepository.deleteById(id);
+        }
     }
 }
