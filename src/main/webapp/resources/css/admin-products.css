@@ -1,0 +1,276 @@
+/* =============================================
+   Admin Products List Page - admin-products.css
+   ============================================= */
+
+/* ---- Table Card Container ---- */
+.products-table-card {
+    background: rgba(30, 41, 59, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    overflow: hidden;
+    backdrop-filter: blur(12px);
+}
+
+/* ---- Card Header Bar ---- */
+.products-table-card .card-header-bar {
+    padding: 18px 24px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.products-table-card .card-header-bar h5 {
+    margin: 0;
+    font-weight: 600;
+    font-size: 1rem;
+    color: #f8fafc;
+}
+
+/* ---- Search Input ---- */
+.search-input-wrap {
+    position: relative;
+}
+
+.search-input-wrap i {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #94a3b8;
+    font-size: 0.85rem;
+    pointer-events: none;
+}
+
+.search-input-wrap input {
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    color: #f8fafc;
+    padding: 8px 14px 8px 34px;
+    font-size: 0.875rem;
+    width: 220px;
+    transition: border-color 0.3s, background 0.3s;
+}
+
+.search-input-wrap input::placeholder {
+    color: #64748b;
+}
+
+.search-input-wrap input:focus {
+    outline: none;
+    border-color: rgba(56, 189, 248, 0.5);
+    background: rgba(15, 23, 42, 0.8);
+}
+
+/* ---- Admin Table ---- */
+.admin-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    color: #f8fafc;
+    font-size: 0.9rem;
+}
+
+.admin-table thead tr th {
+    background: rgba(15, 23, 42, 0.7);
+    color: #94a3b8;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    padding: 14px 18px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+    white-space: nowrap;
+}
+
+.admin-table tbody tr {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    transition: background 0.2s ease;
+}
+
+.admin-table tbody tr:last-child {
+    border-bottom: none;
+}
+
+.admin-table tbody tr:hover {
+    background: rgba(56, 189, 248, 0.05);
+}
+
+.admin-table tbody td {
+    padding: 14px 18px;
+    vertical-align: middle;
+}
+
+/* ---- Product Thumbnail in Table ---- */
+.prod-thumb-wrap {
+    width: 56px;
+    height: 56px;
+    border-radius: 10px;
+    overflow: hidden;
+    background: rgba(15, 23, 42, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.prod-thumb {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    padding: 4px;
+}
+
+.prod-name-cell {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.prod-name-text {
+    font-weight: 600;
+    color: #f8fafc;
+    text-decoration: none;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    max-width: 220px;
+    line-height: 1.4;
+    transition: color 0.2s;
+}
+
+.prod-name-text:hover {
+    color: #38bdf8;
+}
+
+.prod-sub {
+    font-size: 0.78rem;
+    color: #64748b;
+    margin-top: 2px;
+}
+
+/* ---- Factory Badge ---- */
+.badge-factory {
+    display: inline-block;
+    background: rgba(129, 140, 248, 0.15);
+    border: 1px solid rgba(129, 140, 248, 0.3);
+    color: #a5b4fc;
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* ---- Price Tag ---- */
+.price-tag {
+    font-weight: 700;
+    color: #38bdf8;
+    font-size: 0.95rem;
+    white-space: nowrap;
+}
+
+/* ---- Quantity Tag ---- */
+.qty-tag {
+    font-weight: 600;
+    color: #f8fafc;
+}
+
+.qty-tag.low {
+    color: #f43f5e;
+}
+
+/* ---- Sold Tag ---- */
+.sold-tag {
+    color: #94a3b8;
+    font-size: 0.88rem;
+}
+
+/* ---- Action Buttons ---- */
+.action-btn-group {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.btn-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    padding: 6px 12px;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.btn-action-edit {
+    background: rgba(251, 191, 36, 0.1);
+    border-color: rgba(251, 191, 36, 0.3);
+    color: #fbbf24;
+}
+
+.btn-action-edit:hover {
+    background: rgba(251, 191, 36, 0.2);
+    border-color: rgba(251, 191, 36, 0.6);
+    color: #fcd34d;
+    transform: translateY(-1px);
+}
+
+.btn-action-delete {
+    background: rgba(244, 63, 94, 0.1);
+    border-color: rgba(244, 63, 94, 0.3);
+    color: #f43f5e;
+}
+
+.btn-action-delete:hover {
+    background: rgba(244, 63, 94, 0.2);
+    border-color: rgba(244, 63, 94, 0.6);
+    color: #fb7185;
+    transform: translateY(-1px);
+}
+
+/* ---- Empty State ---- */
+.empty-products {
+    padding: 60px 20px;
+    text-align: center;
+}
+
+.empty-products i {
+    font-size: 3.5rem;
+    color: #334155;
+    margin-bottom: 16px;
+    display: block;
+}
+
+.empty-products p {
+    color: #64748b;
+    font-size: 1rem;
+}
+
+/* ---- Table Footer ---- */
+.table-footer-bar {
+    padding: 14px 24px;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    color: #64748b;
+    font-size: 0.82rem;
+}
+
+.table-footer-bar strong {
+    color: #f8fafc;
+}
+
+/* ---- Table Responsive Wrapper ---- */
+.table-responsive-wrap {
+    overflow-x: auto;
+}
