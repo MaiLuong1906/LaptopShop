@@ -124,6 +124,19 @@ public class ItemController {
         long id = (long) session.getAttribute("id");
         user.setId(id);
         this.productService.handlePlaceOrder(user, session, fullName, phone, address);
-        return "redirect:/";
+        return "redirect:/order-history";
+    }
+
+    @GetMapping("/order-history")
+    public String getOrderHistory(HttpServletRequest request, Model model) {
+        HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("id") == null) {
+            return "redirect:/login";
+        }
+        long id = (long) session.getAttribute("id");
+        User user = new User();
+        user.setId(id);
+        model.addAttribute("orders", this.productService.getOrdersByUser(user));
+        return "client/order/history";
     }
 }

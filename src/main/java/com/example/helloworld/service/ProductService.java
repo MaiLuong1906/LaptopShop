@@ -158,8 +158,10 @@ public class ProductService {
         order.setReceiverName(fullName);
         order.setReceiverAddress(address);
         order.setReceiverPhone(phone);
+        order.setStatus("PENDING");
         order = orderRepository.save(order);
 
+        double totalPrice = 0;
         Cart cart = cartRepository.findByUser(user);
         if (cart != null) {
             List<CartDetail> cartDetails = cartDetailRepository.findByCart(cart);
@@ -171,6 +173,8 @@ public class ProductService {
                     orderDetail.setQuantity(cartDetail.getQuantity());
                     orderDetail.setPrice(cartDetail.getPrice());
                     orderDetailRepository.save(orderDetail);
+                    
+                    totalPrice += cartDetail.getPrice() * cartDetail.getQuantity();
                 }
                 for (CartDetail cartDetail : cartDetails) {
                     cartDetailRepository.delete(cartDetail);
@@ -180,6 +184,37 @@ public class ProductService {
                 session.setAttribute("cartSum", 0);
             }
         }
+        
+        order.setTotalPrice(totalPrice);
+        orderRepository.save(order);
+    }
+    public List<Order> getOrdersByUser(User user) {
+        return orderRepository.findByUser(user);
+    }
 
+    public List<Order> getAllOrders() {
+        return orderRepository.findAll();
+    }
+
+    public Order getOrderById(long id) {
+        return orderRepository.findById(id).orElse(null);
+    }
+
+    public void updateOrder(Order order) {
+        orderRepository.save(order);
+    }
+
+    public void deleteOrderById(long id) {
+        Optional<Order> orderOptional = orderRepository.findById(id);
+        if (orderOptional.isPresent()) {
+            Order order = orderOptional.get();
+            List<OrderDetail> details = order.getOrderDetails();
+            if (details != null) {
+                for (OrderDetail detail : details) {
+                    orderDetailRepository.deleteById(detail.getId());
+                }
+            }
+            orderRepository.deleteById(id);
+        }
     }
 }
