@@ -81,7 +81,8 @@ public class ProductService {
         CartDetail oldDetail = cartDetailRepository.findByCartAndProducts(cart, product);
 
         if (oldDetail == null) {
-            if (product.getQuantity() < quantity) return; // Prevent adding if out of stock
+            if (product.getQuantity() < quantity)
+                return; // Prevent adding if out of stock
             // Chưa có → tạo mới CartDetail
             CartDetail cartDetail = new CartDetail();
             cartDetail.setQuantity(quantity);
@@ -168,7 +169,7 @@ public class ProductService {
         order.setStatus("PENDING");
         order = orderRepository.save(order);
 
-                        double totalPrice = 0;
+        double totalPrice = 0;
         Cart cart = cartRepository.findByUser(user);
         if (cart != null) {
             List<CartDetail> cartDetails = cartDetailRepository.findByCart(cart);
@@ -184,7 +185,8 @@ public class ProductService {
 
                 for (CartDetail cartDetail : cartDetails) {
                     Product p = cartDetail.getProducts();
-                    if (cartDetail.getQuantity() <= 0) continue; // Skip out of stock
+                    if (cartDetail.getQuantity() <= 0)
+                        continue; // Skip out of stock
 
                     OrderDetail orderDetail = new OrderDetail();
                     orderDetail.setOrder(order);
@@ -192,9 +194,9 @@ public class ProductService {
                     orderDetail.setQuantity(cartDetail.getQuantity());
                     orderDetail.setPrice(cartDetail.getPrice());
                     orderDetailRepository.save(orderDetail);
-                    
+
                     totalPrice += cartDetail.getPrice() * cartDetail.getQuantity();
-                    
+
                     // Deduct stock and update sold
                     p.setQuantity(p.getQuantity() - cartDetail.getQuantity());
                     p.setSold(p.getSold() + cartDetail.getQuantity());
@@ -208,10 +210,11 @@ public class ProductService {
                 session.setAttribute("cartSum", 0);
             }
         }
-        
+
         order.setTotalPrice(totalPrice);
         orderRepository.save(order);
     }
+
     public List<Order> getOrdersByUser(User user) {
         return orderRepository.findByUser(user);
     }
@@ -226,7 +229,7 @@ public class ProductService {
 
     public void updateOrderStatus(Order order, String newStatus) {
         String oldStatus = order.getStatus();
-        
+
         if (!"CANCELED".equals(oldStatus) && "CANCELED".equals(newStatus)) {
             // Cancelled: Restore inventory
             for (OrderDetail detail : order.getOrderDetails()) {
@@ -244,7 +247,7 @@ public class ProductService {
                 productRepository.save(p);
             }
         }
-        
+
         order.setStatus(newStatus);
         orderRepository.save(order);
     }
@@ -261,5 +264,13 @@ public class ProductService {
             }
             orderRepository.deleteById(id);
         }
+    }
+
+    public long countProducts() {
+        return productRepository.count();
+    }
+
+    public long countOrders() {
+        return orderRepository.count();
     }
 }
