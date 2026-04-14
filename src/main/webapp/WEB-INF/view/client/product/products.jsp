@@ -39,8 +39,7 @@
             <div class="col-lg-3 col-md-4 mb-4">
                 <form id="filterForm" action="/products" method="GET">
                     
-                    <!-- Include current sort and page params as hidden inside form -->
-                    <input type="hidden" name="sort" value="${param.sort}">
+                    <!-- Form action handles filters automatically -->
 
                     <div class="filter-sidebar">
                         
@@ -48,40 +47,62 @@
                         <div class="filter-group">
                             <h4 class="filter-title"><i class="fas fa-tags"></i> Thương hiệu</h4>
                             
+                            <c:set var="factoryParams" value="${paramValues.factory}" />
                             <div class="filter-item">
-                                <label><input type="checkbox" name="factory" value="Apple" class="custom-checkbox"> Apple</label>
+                                <label><input type="checkbox" name="factory" value="Apple" class="custom-checkbox"
+                                    <c:forEach var="f" items="${factoryParams}"><c:if test="${f == 'Apple'}">checked</c:if></c:forEach>
+                                > Apple</label>
                             </div>
                             <div class="filter-item">
-                                <label><input type="checkbox" name="factory" value="Asus" class="custom-checkbox"> Asus</label>
+                                <label><input type="checkbox" name="factory" value="Asus" class="custom-checkbox"
+                                    <c:forEach var="f" items="${factoryParams}"><c:if test="${f == 'Asus'}">checked</c:if></c:forEach>
+                                > Asus</label>
                             </div>
                             <div class="filter-item">
-                                <label><input type="checkbox" name="factory" value="Acer" class="custom-checkbox"> Acer</label>
+                                <label><input type="checkbox" name="factory" value="Acer" class="custom-checkbox"
+                                    <c:forEach var="f" items="${factoryParams}"><c:if test="${f == 'Acer'}">checked</c:if></c:forEach>
+                                > Acer</label>
                             </div>
                             <div class="filter-item">
-                                <label><input type="checkbox" name="factory" value="Dell" class="custom-checkbox"> Dell</label>
+                                <label><input type="checkbox" name="factory" value="Dell" class="custom-checkbox"
+                                    <c:forEach var="f" items="${factoryParams}"><c:if test="${f == 'Dell'}">checked</c:if></c:forEach>
+                                > Dell</label>
                             </div>
                             <div class="filter-item">
-                                <label><input type="checkbox" name="factory" value="HP" class="custom-checkbox"> HP</label>
+                                <label><input type="checkbox" name="factory" value="HP" class="custom-checkbox"
+                                    <c:forEach var="f" items="${factoryParams}"><c:if test="${f == 'HP'}">checked</c:if></c:forEach>
+                                > HP</label>
                             </div>
                             <div class="filter-item">
-                                <label><input type="checkbox" name="factory" value="Lenovo" class="custom-checkbox"> Lenovo</label>
+                                <label><input type="checkbox" name="factory" value="Lenovo" class="custom-checkbox"
+                                    <c:forEach var="f" items="${factoryParams}"><c:if test="${f == 'Lenovo'}">checked</c:if></c:forEach>
+                                > Lenovo</label>
                             </div>
                         </div>
 
                         <!-- Target Filter -->
                         <div class="filter-group">
                             <h4 class="filter-title"><i class="fas fa-bullseye"></i> Nhu cầu</h4>
+                            <c:set var="targetParams" value="${paramValues.target}" />
                             <div class="filter-item">
-                                <label><input type="checkbox" name="target" value="Gaming" class="custom-checkbox"> Gaming</label>
+                                <label><input type="checkbox" name="target" value="Gaming" class="custom-checkbox"
+                                    <c:forEach var="t" items="${targetParams}"><c:if test="${t == 'Gaming'}">checked</c:if></c:forEach>
+                                > Gaming</label>
                             </div>
                             <div class="filter-item">
-                                <label><input type="checkbox" name="target" value="VP" class="custom-checkbox"> Sinh viên - VP</label>
+                                <label><input type="checkbox" name="target" value="VP" class="custom-checkbox"
+                                    <c:forEach var="t" items="${targetParams}"><c:if test="${t == 'VP'}">checked</c:if></c:forEach>
+                                > Sinh viên - VP</label>
                             </div>
                             <div class="filter-item">
-                                <label><input type="checkbox" name="target" value="Graphic" class="custom-checkbox"> Đồ họa - Kỹ thuật</label>
+                                <label><input type="checkbox" name="target" value="Graphic" class="custom-checkbox"
+                                    <c:forEach var="t" items="${targetParams}"><c:if test="${t == 'Graphic'}">checked</c:if></c:forEach>
+                                > Đồ họa - Kỹ thuật</label>
                             </div>
                             <div class="filter-item">
-                                <label><input type="checkbox" name="target" value="Thin" class="custom-checkbox"> Mỏng nhẹ</label>
+                                <label><input type="checkbox" name="target" value="Thin" class="custom-checkbox"
+                                    <c:forEach var="t" items="${targetParams}"><c:if test="${t == 'Thin'}">checked</c:if></c:forEach>
+                                > Mỏng nhẹ</label>
                             </div>
                         </div>
 
@@ -106,16 +127,9 @@
             <!-- Product Grid (Right) -->
             <div class="col-lg-9 col-md-8">
                 
-                <!-- Toolbar for results info and sorting -->
+                <!-- Toolbar for results info -->
                 <div class="toolbar">
                     <span style="color: #cbd5e1;">Hiển thị <strong>${products != null ? products.size() : 12}</strong> kết quả</span>
-                    <div>
-                        <select class="sort-select" onchange="updateSortAndSubmit(this.value)">
-                            <option value="">Sắp xếp mặc định</option>
-                            <option value="price_asc" ${param.sort == 'price_asc' ? 'selected' : ''}>Giá: Thấp đến Cao</option>
-                            <option value="price_desc" ${param.sort == 'price_desc' ? 'selected' : ''}>Giá: Cao đến Thấp</option>
-                        </select>
-                    </div>
                 </div>
 
                 <!-- Products Display Area -->

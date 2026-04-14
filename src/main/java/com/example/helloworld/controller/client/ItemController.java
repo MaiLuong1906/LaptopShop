@@ -34,7 +34,14 @@ public class ItemController {
     }
 
     @GetMapping("/products")
-    public String getProductsPage(Model model, @RequestParam("page") Optional<String> pageOptional) {
+    public String getProductsPage(Model model,
+            @RequestParam("page") Optional<String> pageOptional,
+            @RequestParam("name") Optional<String> nameOptional,
+            @RequestParam("factory") Optional<List<String>> factoryOptional,
+            @RequestParam("target") Optional<List<String>> targetOptional,
+            @RequestParam("minPrice") Optional<String> minPriceOptional,
+            @RequestParam("maxPrice") Optional<String> maxPriceOptional) {
+
         int page = 1;
         try {
             if (pageOptional.isPresent()) {
@@ -42,8 +49,31 @@ public class ItemController {
             }
         } catch (NumberFormatException e) {
         }
+
+        // Parse price params
+        Optional<Double> minPrice = Optional.empty();
+        Optional<Double> maxPrice = Optional.empty();
+        try {
+            if (minPriceOptional.isPresent() && !minPriceOptional.get().isBlank()) {
+                minPrice = Optional.of(Double.parseDouble(minPriceOptional.get()));
+            }
+        } catch (NumberFormatException e) {
+        }
+        try {
+            if (maxPriceOptional.isPresent() && !maxPriceOptional.get().isBlank()) {
+                maxPrice = Optional.of(Double.parseDouble(maxPriceOptional.get()));
+            }
+        } catch (NumberFormatException e) {
+        }
+
         Pageable pageable = PageRequest.of(page - 1, 6);
-        Page<Product> productsPage = productService.getAllProducts(pageable);
+        Page<Product> productsPage = productService.getProductsWithFilter(
+                nameOptional.orElse(null),
+                factoryOptional.orElse(null),
+                targetOptional.orElse(null),
+                minPrice.orElse(null),
+                maxPrice.orElse(null),
+                pageable);
         List<Product> productsList = productsPage.getContent();
 
         model.addAttribute("products", productsList);
