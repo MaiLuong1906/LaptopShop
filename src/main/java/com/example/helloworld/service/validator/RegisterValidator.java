@@ -2,7 +2,6 @@ package com.example.helloworld.service.validator;
 
 import org.springframework.stereotype.Service;
 
-import com.example.helloworld.domain.User;
 import com.example.helloworld.domain.dto.RegisterDTO;
 import com.example.helloworld.service.UserService;
 

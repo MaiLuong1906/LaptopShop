@@ -8,12 +8,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import com.example.helloworld.domain.Order;
 import com.example.helloworld.domain.Product;
 import com.example.helloworld.domain.User;
 import com.example.helloworld.domain.dto.RegisterDTO;
