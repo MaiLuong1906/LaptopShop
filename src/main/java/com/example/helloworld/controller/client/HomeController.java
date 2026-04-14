@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import com.example.helloworld.domain.Order;
 import com.example.helloworld.domain.Product;
 import com.example.helloworld.domain.User;
 import com.example.helloworld.domain.dto.RegisterDTO;
@@ -17,9 +18,6 @@ import com.example.helloworld.service.ProductService;
 import com.example.helloworld.service.UserService;
 
 import jakarta.validation.Valid;
-
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class HomeController {
