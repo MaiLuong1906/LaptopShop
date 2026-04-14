@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.example.helloworld.domain.Cart;
@@ -18,6 +19,7 @@ import com.example.helloworld.repository.CartRepository;
 import com.example.helloworld.repository.OrderDetailRepository;
 import com.example.helloworld.repository.OrderRepository;
 import com.example.helloworld.repository.ProductRepository;
+import com.example.helloworld.service.specification.ProductSpecs;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -43,6 +45,30 @@ public class ProductService {
 
     public Page<Product> getAllProducts(Pageable pageable) {
         return productRepository.findAll(pageable);
+    }
+
+    public Page<Product> getProductsWithFilter(String name, List<String> factory,
+            List<String> target, Double minPrice, Double maxPrice, Pageable pageable) {
+
+        Specification<Product> spec = Specification.where(null);
+
+        if (name != null && !name.isBlank()) {
+            spec = spec.and(ProductSpecs.nameLike(name));
+        }
+        if (factory != null && !factory.isEmpty()) {
+            spec = spec.and(ProductSpecs.matchFactory(factory));
+        }
+        if (target != null && !target.isEmpty()) {
+            spec = spec.and(ProductSpecs.matchTarget(target));
+        }
+        if (minPrice != null) {
+            spec = spec.and(ProductSpecs.matchMinPrice(minPrice));
+        }
+        if (maxPrice != null) {
+            spec = spec.and(ProductSpecs.matchMaxPrice(maxPrice));
+        }
+
+        return productRepository.findAll(spec, pageable);
     }
 
     public Product saveProduct(Product product) {

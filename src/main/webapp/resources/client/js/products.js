@@ -1,12 +1,3 @@
-// Update the sort hidden field when select changes, then submit form
-function updateSortAndSubmit(sortValue) {
-    const sortInput = document.querySelector("input[name='sort']");
-    if (sortInput) {
-        sortInput.value = sortValue;
-        document.getElementById("filterForm").submit();
-    }
-}
-
 // Handle Pagination link click to append filter params
 function changePage(page) {
     let url = new URL(window.location.href);
