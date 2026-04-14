@@ -71,6 +71,28 @@
                                             </c:forEach>
                                         </tbody>
                                     </table>
+                                    <nav aria-label="Page navigation example">
+                                        <ul class="pagination justify-content-center">
+                                            <li class="page-item ${currentPage == 1 ? 'disabled' : ''}">
+                                                <a class="page-link" href="/admin/users?page=${currentPage - 1}"
+                                                    aria-label="Previous">
+                                                    <span aria-hidden="true">&laquo;</span>
+                                                </a>
+                                            </li>
+                                            <c:forEach begin="0" end="${totalPages - 1}" var="page">
+                                                <li class="page-item">
+                                                    <a class="page-link ${(page + 1)eq currentPage ? 'active' : ''}"
+                                                        href="/admin/users?page=${page + 1}">${page + 1}</a>
+                                                </li>
+                                            </c:forEach>
+                                            <li class="page-item ${currentPage == totalPages ? 'disabled' : ''}">
+                                                <a class="page-link" href="/admin/users?page=${currentPage + 1}"
+                                                    aria-label="Next">
+                                                    <span aria-hidden="true">&raquo;</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </nav>
                                 </div>
                             </div>
                         </div><!-- end .page-content -->

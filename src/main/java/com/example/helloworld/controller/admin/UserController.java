@@ -4,7 +4,11 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.List;
+import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -34,9 +38,19 @@ public class UserController {
     }
 
     @GetMapping("admin/users")
-    public String getUserPage(Model model) {
-        List<User> users = userService.getAllUsers();
-        model.addAttribute("users", users);
+    public String getUserPage(Model model, @RequestParam("page") Optional<String> pageOptional) {
+        int page = 1;
+        try {
+            if (pageOptional.isPresent()) {
+                page = Integer.parseInt(pageOptional.get());
+            }
+        } catch (NumberFormatException e) {
+        }
+        Pageable pageable = PageRequest.of(page - 1, 2);
+        Page<User> userPage = userService.getAllUsers(pageable);
+        model.addAttribute("users", userPage.getContent());
+        model.addAttribute("currentPage", userPage.getNumber() + 1);
+        model.addAttribute("totalPages", userPage.getTotalPages());
         return "admin/user/users";
     }
 

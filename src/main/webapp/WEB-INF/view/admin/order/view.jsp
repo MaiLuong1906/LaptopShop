@@ -23,21 +23,25 @@
                 </div>
                 
                 <div class="card mb-4">
-                    <div class="card-body">
-                        <h5>Thông tin người nhận</h5>
-                        <div class="row mt-3">
-                            <div class="col-md-6"><p><strong>Tên:</strong> ${order.receiverName}</p></div>
-                            <div class="col-md-6"><p><strong>SĐT:</strong> ${order.receiverPhone}</p></div>
-                            <div class="col-md-12"><p><strong>Địa chỉ:</strong> ${order.receiverAddress}</p></div>
-                            <div class="col-md-6"><p><strong>Trạng thái:</strong> <span class="badge bg-primary">${order.status}</span></p></div>
-                            <div class="col-md-6"><p><strong>Tổng tiền:</strong> <fmt:formatNumber value="${order.totalPrice}" type="number" groupingUsed="true" />₫</p></div>
+                    <div class="card-body" style="color: #cbd5e1;">
+                        <h5 style="color: #f8fafc; font-weight: 600;"><i class="fas fa-address-card me-2" style="color: #38bdf8;"></i> Thông tin người nhận</h5>
+                        <div class="row mt-4">
+                            <div class="col-md-6 mb-3"><p class="mb-1"><strong style="color: #f8fafc; font-weight: 500;">Tên:</strong> ${order.receiverName}</p></div>
+                            <div class="col-md-6 mb-3"><p class="mb-1"><strong style="color: #f8fafc; font-weight: 500;">SĐT:</strong> ${order.receiverPhone}</p></div>
+                            <div class="col-md-12 mb-3"><p class="mb-1"><strong style="color: #f8fafc; font-weight: 500;">Địa chỉ:</strong> ${order.receiverAddress}</p></div>
+                            <div class="col-md-6 mb-3">
+                                <p class="mb-1"><strong style="color: #f8fafc; font-weight: 500;">Trạng thái:</strong> 
+                                    <span class="badge ${order.status == 'PENDING' ? 'bg-warning text-dark' : (order.status == 'SHIPPING' ? 'bg-info text-dark' : (order.status == 'DELIVERED' ? 'bg-success' : 'bg-danger'))} px-2 py-1">${order.status}</span>
+                                </p>
+                            </div>
+                            <div class="col-md-6 mb-3"><p class="mb-1"><strong style="color: #f8fafc; font-weight: 500;">Tổng tiền:</strong> <span style="color: #fbbf24; font-weight: 600;"><fmt:formatNumber value="${order.totalPrice}" type="number" groupingUsed="true" />₫</span></p></div>
                         </div>
                     </div>
                 </div>
 
                 <div class="card">
                     <div class="card-body">
-                        <h5>Danh sách sản phẩm</h5>
+                        <h5 style="color: #f8fafc; font-weight: 600; margin-bottom: 20px;"><i class="fas fa-list-ul me-2" style="color: #38bdf8;"></i> Danh sách sản phẩm</h5>
                         <table class="data-table mt-3">
                             <thead>
                                 <tr>
