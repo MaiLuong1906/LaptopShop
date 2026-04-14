@@ -2,7 +2,11 @@ package com.example.helloworld.controller.client;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,12 +17,12 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import com.example.helloworld.domain.Cart;
 import com.example.helloworld.domain.CartDetail;
 import com.example.helloworld.domain.Order;
+import com.example.helloworld.domain.Product;
 import com.example.helloworld.domain.User;
 import com.example.helloworld.service.ProductService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
@@ -27,6 +31,26 @@ public class ItemController {
 
     public ItemController(ProductService productService) {
         this.productService = productService;
+    }
+
+    @GetMapping("/products")
+    public String getProductsPage(Model model, @RequestParam("page") Optional<String> pageOptional) {
+        int page = 1;
+        try {
+            if (pageOptional.isPresent()) {
+                page = Integer.parseInt(pageOptional.get());
+            }
+        } catch (NumberFormatException e) {
+        }
+        Pageable pageable = PageRequest.of(page - 1, 6);
+        Page<Product> productsPage = productService.getAllProducts(pageable);
+        List<Product> productsList = productsPage.getContent();
+
+        model.addAttribute("products", productsList);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", productsPage.getTotalPages());
+
+        return "client/product/products";
     }
 
     @PostMapping("/add-product-to-cart/{id}")
@@ -42,7 +66,7 @@ public class ItemController {
                 session.setAttribute("cartSum", cart.getSum());
             }
         }
-        return "redirect:/";
+        return "redirect:/cart";
     }
 
     @PostMapping("/buy-now/{id}")

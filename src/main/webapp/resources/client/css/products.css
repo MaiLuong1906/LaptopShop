@@ -1,0 +1,193 @@
+/* Custom Styles for Products Page Layout */
+body { 
+    background-color: #0f172a; 
+    color: #f8fafc; 
+    font-family: 'Outfit', sans-serif;
+}
+.page-header {
+    padding: 100px 0 40px;
+    text-align: center;
+    background: linear-gradient(to bottom, rgba(15,23,42,1) 0%, rgba(30,41,59,0.5) 100%);
+}
+.page-title {
+    font-size: 2.8rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.filter-sidebar {
+    background: rgba(30, 41, 59, 0.4);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px;
+    padding: 24px;
+    position: sticky;
+    top: 90px; /* Offset for header */
+    box-shadow: 0 10px 25px -5px rgba(0,0,0,0.4);
+}
+.filter-group { 
+    margin-bottom: 24px; 
+}
+.filter-group:last-child {
+    margin-bottom: 0;
+}
+.filter-title {
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin-bottom: 16px;
+    color: #38bdf8;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+.filter-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    color: #cbd5e1;
+    transition: color 0.3s ease;
+}
+.filter-item:hover { color: #f8fafc; }
+.filter-item label { 
+    cursor: pointer; 
+    display: flex; 
+    align-items: center; 
+    flex-grow: 1; 
+    margin: 0;
+}
+.custom-checkbox {
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border: 2px solid rgba(255,255,255,0.2);
+    border-radius: 4px;
+    background: transparent;
+    margin-right: 12px;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.custom-checkbox:checked {
+    background: #38bdf8;
+    border-color: #38bdf8;
+}
+.custom-checkbox:checked::after {
+    content: '\f00c';
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+    color: #0f172a;
+    position: absolute;
+    font-size: 10px;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.filter-count {
+    background: rgba(255,255,255,0.05);
+    color: #94a3b8;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+}
+
+.price-inputs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+.price-input-wrap {
+    position: relative;
+    flex: 1;
+}
+.price-input {
+    width: 100%;
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: #f8fafc;
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    transition: all 0.3s;
+}
+.price-input:focus {
+    outline: none;
+    border-color: #38bdf8;
+    background: rgba(15, 23, 42, 0.8);
+}
+.btn-filter {
+    width: 100%;
+    background: linear-gradient(135deg, #38bdf8, #6366f1);
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 12px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    transition: all 0.3s;
+    margin-top: 10px;
+}
+.btn-filter:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(56, 189, 248, 0.4);
+}
+
+/* Products Toolbar */
+.toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(30, 41, 59, 0.4);
+    backdrop-filter: blur(8px);
+    padding: 16px 24px;
+    border-radius: 16px;
+    margin-bottom: 24px;
+    border: 1px solid rgba(255,255,255,0.05);
+}
+.sort-select {
+    background: rgba(15, 23, 42, 0.6);
+    color: #f8fafc;
+    border: 1px solid rgba(255,255,255,0.1);
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+.sort-select:focus {
+    outline: none;
+    border-color: #38bdf8;
+}
+
+/* Pagination overrides */
+.glass-pagination .page-link {
+    background: rgba(30, 41, 59, 0.5);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: #cbd5e1;
+    box-shadow: none;
+    margin: 0 4px;
+    border-radius: 8px !important;
+    transition: all 0.3s ease;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 500;
+}
+.glass-pagination .page-link:hover {
+    background: rgba(56, 189, 248, 0.15);
+    color: #38bdf8;
+    border-color: #38bdf8;
+}
+.glass-pagination .page-item.active .page-link {
+    background: #38bdf8;
+    border-color: #38bdf8;
+    color: #0f172a;
+}
+.glass-pagination .disabled .page-link {
+    background: rgba(30, 41, 59, 0.3);
+    color: rgba(255,255,255,0.2);
+    border-color: rgba(255,255,255,0.05);
+}
