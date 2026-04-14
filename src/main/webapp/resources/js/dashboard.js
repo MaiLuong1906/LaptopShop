@@ -109,6 +109,26 @@ function initNavigation() {
             });
         }
     });
+
+    // Set active sidebar item based on current URL
+    const path = window.location.pathname;
+    const allNavs = document.querySelectorAll('.sidebar-nav .nav-item');
+    if (allNavs.length > 0) {
+        allNavs.forEach(item => item.classList.remove('active'));
+        if (path.startsWith('/admin/product')) {
+            const el = document.getElementById('nav-products');
+            if (el) el.classList.add('active');
+        } else if (path.startsWith('/admin/order')) {
+            const el = document.getElementById('nav-orders');
+            if (el) el.classList.add('active');
+        } else if (path.startsWith('/admin/user')) {
+            const el = document.getElementById('nav-users');
+            if (el) el.classList.add('active');
+        } else if (path.includes('/admin')) {
+            const el = document.getElementById('nav-dashboard');
+            if (el) el.classList.add('active');
+        }
+    }
 }
 
 // ==========================================

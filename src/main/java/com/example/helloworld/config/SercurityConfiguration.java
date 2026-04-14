@@ -60,7 +60,8 @@ public class SercurityConfiguration {
     SecurityFilterChain filterChain(HttpSecurity http, DaoAuthenticationProvider authProvider) throws Exception {
         http.authorizeHttpRequests(authorize -> authorize
                 .dispatcherTypeMatchers(DispatcherType.FORWARD, DispatcherType.INCLUDE).permitAll()
-                .requestMatchers("/", "/login", "/client/**", "/product/**", "/css/**", "/js/**", "/images/**")
+                .requestMatchers("/", "/login", "/client/**", "/product/**", "/css/**", "/js/**", "/images/**",
+                        "/register")
                 .permitAll()
                 .requestMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated())
